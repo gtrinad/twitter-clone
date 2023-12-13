@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://admin:admin@postgres:5432/twitter_db
+    networks:
+      - my-network
+    volumes:
+      - ./static/images:/app/images
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=twitter_db
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    networks:
+      - my-network
+    volumes:
+      - ./static:/usr/share/nginx/html
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
