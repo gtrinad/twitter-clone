@@ -7,7 +7,9 @@ async def test_follow_user(client: AsyncClient):
     following_id = 1
 
     # Аутентификация как фоловер
-    response = await client.post(url=f"/api/users/{following_id}/follow", headers=header)
+    response = await client.post(
+        url=f"/api/users/{following_id}/follow", headers=header
+    )
     assert response.status_code == 200
     assert response.json()["result"] is True
 
@@ -18,9 +20,13 @@ async def test_unfollow_user(client: AsyncClient):
     following_id = 1
 
     # Аутентификация как фоловер
-    response = await client.post(url=f"/api/users/{following_id}/follow", headers=header)
+    response = await client.post(
+        url=f"/api/users/{following_id}/follow", headers=header
+    )
 
     # Отписка как фоловер
-    response = await client.delete(url=f"/api/users/{following_id}/follow", headers=header)
+    response = await client.delete(
+        url=f"/api/users/{following_id}/follow", headers=header
+    )
     assert response.status_code == 200
     assert response.json()["result"] is True

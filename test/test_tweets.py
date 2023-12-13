@@ -20,7 +20,9 @@ async def test_delete_tweet(client: AsyncClient):
 
     # Создаем новый твит (чтобы получить его ID)
     tweet_data = {"tweet_data": "Test tweet"}
-    create_response = await client.post(url="/api/tweets", json=tweet_data, headers=header)
+    create_response = await client.post(
+        url="/api/tweets", json=tweet_data, headers=header
+    )
     tweet_id = create_response.json()["tweet_id"]
 
     # Удаляем созданный твит
